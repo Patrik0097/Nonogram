@@ -6,24 +6,44 @@
              xmlns:local="clr-namespace:nonogram.MVVM.View"
              xmlns:vm="clr-namespace:nonogram.MVVM.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             DataContext="{Binding DataContext.ImageListVM, RelativeSource={RelativeSource AncestorType=Window}}"
-             d:DataContext="{d:DesignInstance Type=vm:ImageListViewModel, IsDesignTimeCreatable=True}">
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:ImageListViewModel/>
+    </UserControl.DataContext>
 
     <Grid>
-        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ItemsControl Name="ItemsControlLeft" Grid.Column="0" ItemsSource="{Binding ImagesLeft}" ItemTemplate="{StaticResource ItemTemplate}" Margin="25,0,0,0">
+        <ItemsControl Name="ItemsControlLeft" Grid.Column="0" ItemsSource="{Binding ImagesLeft}" Margin="10,0,0,0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <Image Source="{Binding ImageSource}" Width="100" Height="100"/>
+                            <TextBlock Text="{Binding ImageTitle}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
                     <EventSetter Event="MouseLeftButtonUp" Handler="OnImageSelected" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
-        <ItemsControl Name="ItemsControlRight" Grid.Column="1" ItemsSource="{Binding ImagesRight}" ItemTemplate="{StaticResource ItemTemplate}" Margin="25,0,0,0">
+        <ItemsControl Name="ItemsControlRight" Grid.Column="1" ItemsSource="{Binding ImagesRight}" Margin="10,0,0,0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5">
+                        <StackPanel>
+                            <Image Source="{Binding ImageSource}" Width="100" Height="100"/>
+                            <TextBlock Text="{Binding ImageTitle}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
                     <EventSetter Event="MouseLeftButtonUp" Handler="OnImageSelected" />

@@ -5,7 +5,7 @@
              xmlns:viewModel="clr-namespace:nonogram.MVVM.ViewModel"
              xmlns:view="clr-namespace:nonogram.MVVM.View"
              xmlns:converters="clr-namespace:nonogram.Converters"
-             StartupUri="MainWindow.xaml">
+             StartupUri="LoginWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,13 +14,9 @@
                 <ResourceDictionary Source="Style/ImageListStyle.xaml"/>
                 <ResourceDictionary Source="Style/ScrollBarStyle.xaml"/>
                 <ResourceDictionary Source="Style/ExitSelectorWindowStyle.xaml"/>
-                <ResourceDictionary Source="Style/CustomScrollViewerStyle.xaml"/>
-                <ResourceDictionary Source="Style/ImageButtonStyle.xaml"/>
+                <ResourceDictionary Source="Style/UniformGridStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
 
-
-            
             <DataTemplate DataType="{x:Type viewModel:ImageListViewModel}">
                 <view:ImageListView/>
             </DataTemplate>
@@ -30,11 +26,6 @@
             <DataTemplate DataType="{x:Type viewModel:BuyHelpViewModel}">
                 <view:BuyHelpView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:HelpTableViewModel}">
-                <view:HelpTableView />
-            </DataTemplate>
-
-
 
             <DataTemplate DataType="{x:Type viewModel:TitleBuyViewModel}">
                 <view:TitleBuyView/>
@@ -46,11 +37,22 @@
                 <view:TitleGameView/>
             </DataTemplate>
 
+            <Style x:Key="TextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#998000"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontFamily" Value="/Fonts/#Kabala"/>
+                <Setter Property="FontWeight" Value="ExtraBold"/>
+            </Style>
 
-            <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
-            <converters:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="Foreground" Value="#998000"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontFamily" Value="/Fonts/#Kabala"/>
+                <Setter Property="FontWeight" Value="ExtraBold"/>
+            </Style>
 
+            <converters:SizeConverter x:Key="SizeConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
-
 </Application>
