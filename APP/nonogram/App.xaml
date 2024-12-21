@@ -1,0 +1,56 @@
+﻿<Application x:Class="nonogram.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:nonogram"
+             xmlns:viewModel="clr-namespace:nonogram.MVVM.ViewModel"
+             xmlns:view="clr-namespace:nonogram.MVVM.View"
+             xmlns:converters="clr-namespace:nonogram.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/InputBoxStyle.xaml"/>
+                <ResourceDictionary Source="Style/MenuButtons.xaml"/>
+                <ResourceDictionary Source="Style/ImageListStyle.xaml"/>
+                <ResourceDictionary Source="Style/ScrollBarStyle.xaml"/>
+                <ResourceDictionary Source="Style/ExitSelectorWindowStyle.xaml"/>
+                <ResourceDictionary Source="Style/CustomScrollViewerStyle.xaml"/>
+                <ResourceDictionary Source="Style/ImageButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+
+
+            
+            <DataTemplate DataType="{x:Type viewModel:ImageListViewModel}">
+                <view:ImageListView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:GameViewModel}">
+                <view:GameView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:BuyHelpViewModel}">
+                <view:BuyHelpView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:HelpTableViewModel}">
+                <view:HelpTableView />
+            </DataTemplate>
+
+
+
+            <DataTemplate DataType="{x:Type viewModel:TitleBuyViewModel}">
+                <view:TitleBuyView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:SearchBarViewModel}">
+                <view:SearchBarView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:TitleGameViewModel}">
+                <view:TitleGameView/>
+            </DataTemplate>
+
+
+            <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
+            <converters:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>
