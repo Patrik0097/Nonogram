@@ -9,12 +9,12 @@
         Style="{StaticResource ExitSelectorWindowStyle}"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
-    <Border Background="#1A0D00" CornerRadius="10" BorderBrush="Goldenrod" BorderThickness="3">
+    <Border Background="#1A0D00" CornerRadius="10">
         <Grid>
             <TextBlock x:Name="Message" Text="What would you like to do?" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="30"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
-                <Button x:Name="Logout" Content="Logout" Width="100" Height="30" Style="{StaticResource ReddishButtonStyle}"/>
-                <Button x:Name="Exit" Content="Exit" Width="100" Height="30" Style="{StaticResource ReddishButtonStyle}"/>
+                <Button x:Name="Logout" Content="Logout" Width="100" Height="30" Style="{StaticResource ReddishButtonStyle}" Click="Logout_Click"/>
+                <Button x:Name="Exit" Content="Exit" Width="100" Height="30" Style="{StaticResource ReddishButtonStyle}" Click="Exit_Click"/>
             </StackPanel>
         </Grid>
     </Border>

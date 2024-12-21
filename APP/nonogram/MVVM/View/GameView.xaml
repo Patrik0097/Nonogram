@@ -4,18 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:nonogram.MVVM.View"
-             xmlns:convert="clr-namespace:nonogram.Converters"
              xmlns:vm="clr-namespace:nonogram.MVVM.ViewModel"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             PreviewMouseWheel="GameView_PreviewMouseWheel">
+             MouseWheel="UserControl_MouseWheel">
 
-    <UserControl.Resources>
-        <convert:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
-        <convert:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
-    </UserControl.Resources>
-
-    <Grid x:Name="ZoomContainer">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="UserControl_MouseWheel">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -26,139 +20,128 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Column Hints -->
-            <ItemsControl x:Name="ColumnItemsControl" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding ColumnTableElements}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <!-- Use a UniformGrid for consistent layout -->
-                        <UniformGrid Rows="{Binding GameGrid.MaxColumnHintCount}" 
-                             Columns="{Binding GameGrid.Columns}" 
-                             HorizontalAlignment="Left" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black"
-                                BorderThickness="0.5" 
-                                Width="20" 
-                                Height="20"
-                                MouseLeftButtonDown="Cell_MouseLeftButtonDown">
-                            <Border.Background>
-                                <MultiBinding Converter="{StaticResource BoolToBrushConverter}">
-                                    <Binding Path="IsHighlighted"/>
-                                    <Binding Path="ClickState"/>
-                                    <Binding Path="InitialBackground"/>
-                                </MultiBinding>
-                            </Border.Background>
-                            <TextBlock Text="{Binding Element.Text}"
-                                   Visibility="{Binding Element.Text, Converter={StaticResource ZeroToVisibilityConverter}}"
-                                   FontSize="11"
-                                   FontWeight="Bold"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center" />
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <!-- Column numbers -->
+            <Border Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left">
+                <ItemsControl ItemsSource="{Binding GameGrid.ColumnNumbersTable}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding GameGrid.ColumnNumbersTable.Rows}"
+                                         Columns="{Binding GameGrid.Columns}">
+                                <UniformGrid.Width>
+                                    <MultiBinding Converter="{StaticResource SizeConverter}">
+                                        <Binding Path="GameGrid.Columns"/>
+                                        <Binding Path="DataContext.CellSize" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </UniformGrid.Width>
+                                <UniformGrid.Height>
+                                    <MultiBinding Converter="{StaticResource SizeConverter}">
+                                        <Binding Path="GameGrid.ColumnNumbersTable.Rows"/>
+                                        <Binding Path="DataContext.CellSize" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </UniformGrid.Height>
+                            </UniformGrid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Black" BorderThickness="0.5">
+                                            <TextBlock Text="{Binding}" 
+                                                       Style="{StaticResource UniformTextBlockStyle}" 
+                                                       Background="LightGray" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
 
-            <!-- Row Hints -->
-            <ItemsControl x:Name="RowItemsControl" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding RowTableElements}">
+            <!-- Row numbers -->
+            <Border Grid.Row="1" Grid.Column="0" VerticalAlignment="Top">
+                <ItemsControl ItemsSource="{Binding GameGrid.RowNumbersTable}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding GameGrid.Rows}" 
+                                         Columns="{Binding GameGrid.RowNumbersTable.Columns}">
+                                <UniformGrid.Width>
+                                    <MultiBinding Converter="{StaticResource SizeConverter}">
+                                        <Binding Path="GameGrid.RowNumbersTable.Columns"/>
+                                        <Binding Path="DataContext.CellSize" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </UniformGrid.Width>
+                                <UniformGrid.Height>
+                                    <MultiBinding Converter="{StaticResource SizeConverter}">
+                                        <Binding Path="GameGrid.Rows"/>
+                                        <Binding Path="DataContext.CellSize" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </UniformGrid.Height>
+                            </UniformGrid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Black" BorderThickness="0.5">
+                                            <TextBlock Text="{Binding}" 
+                                                       Style="{StaticResource UniformTextBlockStyle}" 
+                                                       Background="LightGray" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <!-- Game grid -->
+            <ItemsControl ItemsSource="{Binding GameGrid.Cells}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="{Binding GameGrid.Rows}" 
-                                 Columns="{Binding GameGrid.MaxRowHintCount}" 
-                                 VerticalAlignment="Top" />
+                                     Columns="{Binding GameGrid.Columns}">
+                            <UniformGrid.Width>
+                                <MultiBinding Converter="{StaticResource SizeConverter}">
+                                    <Binding Path="GameGrid.Columns"/>
+                                    <Binding Path="DataContext.CellSize" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </UniformGrid.Width>
+                            <UniformGrid.Height>
+                                <MultiBinding Converter="{StaticResource SizeConverter}">
+                                    <Binding Path="GameGrid.Rows"/>
+                                    <Binding Path="DataContext.CellSize" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </UniformGrid.Height>
+                        </UniformGrid>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black"
-                                BorderThickness="0.5" 
-                                Width="20" 
-                                Height="20"
-                                MouseLeftButtonDown="Cell_MouseLeftButtonDown">
-                            <Border.Background>
-                                <MultiBinding Converter="{StaticResource BoolToBrushConverter}">
-                                    <Binding Path="IsHighlighted"/>
-                                    <Binding Path="ClickState"/>
-                                    <Binding Path="InitialBackground"/>
-                                </MultiBinding>
-                            </Border.Background>
-                            <TextBlock Text="{Binding Element.Text}"
-                                   Visibility="{Binding Element.Text, Converter={StaticResource ZeroToVisibilityConverter}}"
-                                   FontSize="11"
-                                   FontWeight="Bold"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center" />
+                        <Border BorderBrush="Black" BorderThickness="0.5" Background="{Binding Background}">
+                            <TextBlock Text="{Binding DisplayText}" 
+                                       Style="{StaticResource UniformTextBlockStyle}" 
+                                       Visibility="{Binding Content, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       MouseLeftButtonUp="TextBlock_MouseLeftButtonUp"/>
                         </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <!-- Game Grid -->
-            <ItemsControl x:Name="ImageCellItemsControl" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ImageCellTableElements}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding GameGrid.Rows}" 
-                             Columns="{Binding GameGrid.Columns}" 
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" 
-                                BorderThickness="0.5" 
-                                Width="20" 
-                                Height="20" 
-                                Focusable="True"
-                                MouseEnter="TextBlock_MouseEnter"
-                                MouseLeave="TextBlock_MouseLeave"
-                                MouseLeftButtonDown="Cell_MouseLeftButtonDown">
-                            <Border.Background>
-                                <MultiBinding Converter="{StaticResource BoolToBrushConverter}">
-                                    <Binding Path="IsHighlighted"/>
-                                    <Binding Path="ClickState"/>
-                                    <Binding Path="InitialBackground"/>
-                                </MultiBinding>
-                            </Border.Background>
-                            <TextBlock 
-                                        x:Name="TextBlock"
-                                        Text="{Binding Element.Text}" 
-                                        Visibility="{Binding Visibility}"
-                                        FontSize="10" 
-                                        TextAlignment="Center" 
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Center"/>
-                        </Border>
-                        <DataTemplate.Triggers>
-                            <!-- Trigger for ClickState 1 -->
-                            <DataTrigger Binding="{Binding ClickState}" Value="1">
-                                <Setter TargetName="TextBlock" Property="Text" Value="" />
-                                <Setter Property="Border.Background" Value="Black" />
-                                <Setter TargetName="TextBlock" Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                            <!-- Trigger for ClickState 2 -->
-                            <DataTrigger Binding="{Binding ClickState}" Value="2">
-                                <Setter TargetName="TextBlock" Property="Text" Value="X" />
-                                <Setter TargetName="TextBlock" Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                            <!-- Trigger for ClickState 3 -->
-                            <DataTrigger Binding="{Binding ClickState}" Value="3">
-                                <Setter TargetName="TextBlock" Property="Text" Value="?" />
-                                <Setter TargetName="TextBlock" Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                            <!-- Default State (ClickState 0) -->
-                            <DataTrigger Binding="{Binding ClickState}" Value="0">
-                                <Setter TargetName="TextBlock" Property="Text" Value="" />
-                                <Setter TargetName="TextBlock" Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

@@ -3,30 +3,42 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:nonogram.MVVM.ViewModel"
-        xmlns:view="clr-namespace:nonogram.MVVM.View"
+        xmlns:viewModel="clr-namespace:nonogram.MVVM.ViewModel"
         xmlns:local="clr-namespace:nonogram"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280" 
-        WindowStartupLocation="CenterScreen"
+        xmlns:view="clr-namespace:nonogram.MVVM.View"
         ResizeMode="CanResize"
+        SizeToContent="WidthAndHeight"
+        MinWidth="400"
+        MinHeight="300"
+        MaxWidth="1920"
+        MaxHeight="1080"
+        mc:Ignorable="d"
+        Title="MainWindow"
         WindowStyle="None"
-        Background="Transparent" AllowsTransparency="True"
-        ShowInTaskbar="True">
+        Background="Transparent"
+        AllowsTransparency="True"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
     <Window.Resources>
-        <DataTemplate DataType="{x:Type vm:HelpTableViewModel}">
-            <view:HelpTableView />
+        <DataTemplate DataType="{x:Type viewModel:BuyHelpViewModel}">
+            <view:BuyHelpView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ImageListViewModel}">
+            <view:ImageListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:GameViewModel}">
+            <view:GameView/>
         </DataTemplate>
     </Window.Resources>
 
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
-
     <Border Background="#1A0D00" CornerRadius="25">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="350"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -35,13 +47,13 @@
             </Grid.RowDefinitions>
             <Grid x:Name="SideBar" Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="52*"/>
+                    <ColumnDefinition Width="73*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="160"/>
                     <RowDefinition/>
-                    <RowDefinition Height="350"/>
+                    <RowDefinition Height="312"/>
                 </Grid.RowDefinitions>
 
                 <ContentControl Grid.ColumnSpan="2" Margin="4,10,10,10">
@@ -51,34 +63,37 @@
                         <RadioButton x:Name="ExitButton" Content="  Exit" FontSize="20" Height="44" Margin="0,0,60,4" Style="{StaticResource MenuButton}" Click="ExitButton_Click"/>
                     </StackPanel>
                 </ContentControl>
-                <ContentControl Grid.Row="1" Grid.ColumnSpan="2">
-
-                </ContentControl>
-                <ContentControl Grid.Row="2" Grid.Column="0">
-
-                </ContentControl>
-                <!-- HelpTableView should be placed here -->
-                <ContentControl x:Name="HelpSlot" Grid.Row="2" Grid.Column="1" Content="{Binding CurrentViewHelp}">
-                </ContentControl>
+                <Label x:Name="name" Content="{Binding UserFullName}" HorizontalAlignment="Center" Height="33" Margin="0,8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160" Style="{StaticResource LabelStyle}" Grid.Column="1"/>
+                <Label x:Name="points" Content="Points:" HorizontalAlignment="Center" Height="35" Margin="0,37,0,0" Grid.Row="1" VerticalAlignment="Top" Width="80" Style="{StaticResource LabelStyle}"/>
+                <Label x:Name="tokens" Content="{Binding UserTokens}" HorizontalAlignment="Center" Height="30" Margin="0,72,0,0" Grid.Row="1" VerticalAlignment="Top" Width="90" Style="{StaticResource LabelStyle}" Grid.Column="1"/>
+                <Label Content="Tokens:" HorizontalAlignment="Center" Height="35" Margin="0,69,0,0" Grid.Row="1" VerticalAlignment="Top" Width="80" Style="{StaticResource LabelStyle}"/>
+                <Label Content="Name:" HorizontalAlignment="Center" Height="35" Margin="0,8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="80" Style="{StaticResource LabelStyle}"/>
+                <Label Content="Helps:" HorizontalAlignment="Left" Height="35" Margin="57,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="80" Style="{StaticResource LabelStyle}" Grid.Column="1"/>
             </Grid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" >
                 <TextBlock Text="NONO&#x0a;GRAM" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#998000" FontSize="38"  Margin="20,17,0,0" FontFamily="/Fonts/#Kabala" FontWeight="ExtraBold" TextWrapping="Wrap"/>
                 <Image x:Name="logo" Source="/Images/logo.png" Height="90" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="5,18,0,10"/>
             </StackPanel>
-            <ContentControl x:Name="TitleBar" Grid.Row="0" Grid.Column="1" Margin="10" Content="{Binding CurrentViewTitle}"/>
-            <Rectangle VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="140" Grid.Row="1" RadiusX="20" RadiusY="20" Margin="0,10,0,0">
-                <Rectangle.Fill>
-                    <ImageBrush x:Name="avatar" ImageSource="{Binding AvatarUrl}" Stretch="None"/>
-                </Rectangle.Fill>
-            </Rectangle>
 
-            <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="25"
-                          HorizontalScrollBarVisibility="Auto" 
-                          VerticalScrollBarVisibility="Auto"
-                          Style="{StaticResource CustomScrollViewerStyle}">
+            <ContentControl x:Name="TitleBar" Grid.Row="0" Grid.Column="1" Margin="10,10,10,10" Content="{Binding CurrentViewTitle}"/>
+
+            <Border BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142" Height="140" Margin="0,10,10,0" Grid.Row="1">
+                <Border.Background>
+                    <ImageBrush x:Name="avatar" ImageSource="pack://application:,,,/Images/default-avatar.png" Stretch="None"/>
+                </Border.Background>
+                <Border.Clip>
+                    <EllipseGeometry Center="71,70" RadiusX="70" RadiusY="70"/>
+                </Border.Clip>
+            </Border>
+
+            <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="25,25,25,25" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar" BasedOn="{StaticResource CustomScrollBar}" />
+                </ScrollViewer.Resources>
                 <ContentControl Content="{Binding CurrentViewMain}"/>
             </ScrollViewer>
+
         </Grid>
     </Border>
 </Window>
